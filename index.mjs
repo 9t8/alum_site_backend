@@ -64,9 +64,7 @@ function routes() {
   fastify.route({
     method: 'POST',
     url: '/auth-multiple',
-    preHandler: fastify.auth([
-      verifyUserAndPassword
-    ]),
+    preHandler: fastify.auth([verifyUserAndPassword]),
     handler: (req, reply) => {
       req.log.info('Auth route')
       reply.send({ hello: 'world' })
@@ -75,5 +73,7 @@ function routes() {
 }
 
 fastify.listen({ port: 3000 }, err => {
-  if (err) throw err
+  if (err) {
+    throw err
+  }
 })
