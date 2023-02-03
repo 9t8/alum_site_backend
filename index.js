@@ -1,4 +1,8 @@
-process.on('exit', () => { console.log('bye') });
+const express = require('express')
+const app = express()
 
-console.log('hello, world');
-console.log(process.platform);
+app.get('/', function (req, res) {
+  res.send('Hello World')
+})
+
+app.listen(3000)

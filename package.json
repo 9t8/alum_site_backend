@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/9t8/gunn-alumni-backend/issues"
   },
-  "homepage": "https://github.com/9t8/gunn-alumni-backend#readme"
+  "homepage": "https://github.com/9t8/gunn-alumni-backend#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
