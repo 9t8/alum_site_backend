@@ -1,4 +1,3 @@
-'use strict'
 /*
 Register a user:
     curl -i 'http://127.0.0.1:3000/register' -H 'content-type: application/json' --data '{"user": "myuser","password":"mypass"}'
@@ -6,6 +5,8 @@ The application then inserts user in the leveldb
 Check it's all working
     curl 'http://127.0.0.1:3000/auth-multiple' -H 'content-type: application/json' --data '{"user": "myuser","password":"mypass"}'
  */
+
+'use strict'
 
 import Fastify from 'fastify'
 import LevelDB from '@fastify/leveldb'
