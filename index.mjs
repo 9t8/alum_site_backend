@@ -3,7 +3,7 @@ Register a user:
     curl -i 'http://127.0.0.1:3000/register' -H 'content-type: application/json' --data '{"user": "myuser","password":"mypass"}'
 The application then inserts user in the leveldb
 Check it's all working
-    curl 'http://127.0.0.1:3000/auth-multiple' -H 'content-type: application/json' --data '{"user": "myuser","password":"mypass"}'
+    curl 'http://127.0.0.1:3000/auth' -H 'content-type: application/json' --data '{"user": "myuser","password":"mypass"}'
  */
 
 'use strict'
@@ -63,7 +63,7 @@ function routes() {
 
   fastify.route({
     method: 'POST',
-    url: '/auth-multiple',
+    url: '/auth',
     preHandler: fastify.auth([verifyUserAndPassword]),
     handler: (req, reply) => {
       req.log.info('Auth route')
