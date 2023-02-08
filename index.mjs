@@ -23,22 +23,23 @@ function verifyUserAndPassword(request, _reply, done) {
     return done(new Error('Missing user in request body'))
   }
 
-  this.level.authdb.get(request.body.user, onUser)
+  this.level.authdb.get(
+    request.body.user,
+    (err, password) => {
+      if (err) {
+        if (err.notFound) {
+          return done(new Error('Password not valid'))
+        }
+        return done(err)
+      }
 
-  function onUser(err, password) {
-    if (err) {
-      if (err.notFound) {
+      if (!password || password !== request.body.password) {
         return done(new Error('Password not valid'))
       }
-      return done(err)
-    }
 
-    if (!password || password !== request.body.password) {
-      return done(new Error('Password not valid'))
+      done()
     }
-
-    done()
-  }
+  )
 }
 
 function routes() {
