@@ -20,7 +20,8 @@ fastify.after(routes);
 
 function verifyUserAndPassword(request, _reply, done) {
   if (!request.body || !request.body.user) {
-    return done(new Error('Missing user in request body'));
+    done(new Error('Missing user in request body'));
+    return;
   }
 
   this.level.authdb.get(
@@ -28,13 +29,16 @@ function verifyUserAndPassword(request, _reply, done) {
     (err, password) => {
       if (err) {
         if (err.notFound) {
-          return done(new Error('Password not valid'));
+          done(new Error('Password not valid'));
+        } else {
+          done(err);
         }
-        return done(err);
+        return;
       }
 
       if (!password || password !== request.body.password) {
-        return done(new Error('Password not valid'));
+        done(new Error('Password not valid'));
+        return;
       }
 
       done();
