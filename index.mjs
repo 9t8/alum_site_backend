@@ -22,9 +22,7 @@ CREATE TABLE users (
 );
 
 const fastify = Fastify({ logger: true });
-
 fastify.register(Auth);
-fastify.after(routes);
 
 const auth_functions = [
   (req, _reply, done) => {
@@ -43,7 +41,7 @@ SELECT password FROM users WHERE email=${req.body.email}`
   }
 ];
 
-function routes() {
+fastify.after(() => {
   fastify.route({
     method: 'GET',
     url: '/dumpusers',
@@ -85,10 +83,10 @@ VALUES(${req.body.email}, ${req.body.password})`
       reply.send({ hello: 'world' });
     }
   });
-}
+});
 
 fastify.listen({ port: 3000 }, err => {
   if (err) {
     throw err;
   }
-})
+});
