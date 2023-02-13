@@ -56,7 +56,6 @@ function routes() {
       }
     },
     handler: (req, reply) => {
-      req.log.info('Creating new user');
       db.query(sql`
 REPLACE INTO users(email, password)
 VALUES(${req.body.email}, ${req.body.password});`
@@ -69,8 +68,7 @@ VALUES(${req.body.email}, ${req.body.password});`
     method: 'POST',
     url: '/auth',
     preHandler: fastify.auth([verifyEmailAndPassword]),
-    handler: (req, reply) => {
-      req.log.info('Auth route');
+    handler: (_req, reply) => {
       reply.send({ hello: 'world' });
     }
   })
