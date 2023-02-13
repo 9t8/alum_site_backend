@@ -1,10 +1,10 @@
 // https://www.npmjs.com/package/@databases/sqlite
 /*
-Register a user:
-  curl -i "http://127.0.0.1:3000/register" -H "content-type: application/json" --data "{\"user\": \"myuser\",\"password\":\"mypass\"}"
-The application then inserts user in the leveldb
-Check it's all working
-  curl "http://127.0.0.1:3000/auth" -H "content-type: application/json" --data "{\"user\": \"myuser\",\"password\":\"mypass\"}"
+  Register a user:
+curl -i "http://127.0.0.1:3000/register" -H "content-type: application/json" --data "{\"email\": \"myuser\",\"password\":\"mypass\"}"
+  The application then inserts user in the db
+  Check it's all working
+curl "http://127.0.0.1:3000/auth" -H "content-type: application/json" --data "{\"email\": \"myuser\",\"password\":\"mypass\"}"
 */
 
 'use strict';
@@ -26,14 +26,14 @@ const fastify = Fastify({ logger: true });
 fastify.register(Auth);
 fastify.after(routes);
 
-function verifyUserAndPassword(request, _reply, done) {
-  if (!request.body || !request.body.user) {
-    done(new Error('Missing user in request body'));
+function verifyEmailAndPassword(request, _reply, done) {
+  if (!request.body || !request.body.email) {
+    done(new Error('Missing email in request body'));
     return;
   }
 
   const pws = db.query(sql`
-SELECT password FROM users WHERE email=${request.body.user};`
+SELECT password FROM users WHERE email=${request.body.email};`
   );
   if (pws.length !== 1 || pws[0].password !== request.body.password) {
     done(new Error('Password not valid'));
@@ -49,17 +49,17 @@ function routes() {
       body: {
         type: 'object',
         properties: {
-          user: { type: 'string' },
+          email: { type: 'string' },
           password: { type: 'string' }
         },
-        required: ['user', 'password']
+        required: ['email', 'password']
       }
     },
     handler: (req, reply) => {
       req.log.info('Creating new user');
       db.query(sql`
 REPLACE INTO users(email, password)
-VALUES(${req.body.user}, ${req.body.password});`
+VALUES(${req.body.email}, ${req.body.password});`
       );
       reply.send();
     }
@@ -68,7 +68,7 @@ VALUES(${req.body.user}, ${req.body.password});`
   fastify.route({
     method: 'POST',
     url: '/auth',
-    preHandler: fastify.auth([verifyUserAndPassword]),
+    preHandler: fastify.auth([verifyEmailAndPassword]),
     handler: (req, reply) => {
       req.log.info('Auth route');
       reply.send({ hello: 'world' });
