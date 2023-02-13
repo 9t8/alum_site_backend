@@ -26,22 +26,35 @@ const fastify = Fastify({ logger: true });
 fastify.register(Auth);
 fastify.after(routes);
 
-function verifyEmailAndPassword(request, _reply, done) {
-  if (!request.body || !request.body.email) {
-    done(new Error('Missing email in request body'));
-    return;
-  }
+const auth_functions = [
+  (req, _reply, done) => {
+    if (!req.body || !req.body.email) {
+      done(new Error('Missing email in request body'));
+      return;
+    }
 
-  const pws = db.query(sql`
-SELECT password FROM users WHERE email=${request.body.email};`
-  );
-  if (pws.length !== 1 || pws[0].password !== request.body.password) {
-    done(new Error('Password not valid'));
+    const pws = db.query(sql`
+SELECT password FROM users WHERE email=${req.body.email}`
+    );
+    if (pws.length !== 1 || pws[0].password !== req.body.password) {
+      done(new Error('Password not valid'));
+    }
+    done();
   }
-  done();
-}
+];
 
 function routes() {
+  fastify.route({
+    method: 'GET',
+    url: '/dumpusers',
+    handler: (req, reply) => {
+      console.table(db.query(sql`
+SELECT * FROM users`
+      ));
+      reply.send();
+    }
+  });
+
   fastify.route({
     method: 'POST',
     url: '/register',
@@ -58,20 +71,20 @@ function routes() {
     handler: (req, reply) => {
       db.query(sql`
 REPLACE INTO users(email, password)
-VALUES(${req.body.email}, ${req.body.password});`
+VALUES(${req.body.email}, ${req.body.password})`
       );
       reply.send();
     }
-  })
+  });
 
   fastify.route({
     method: 'POST',
     url: '/auth',
-    preHandler: fastify.auth([verifyEmailAndPassword]),
+    preHandler: fastify.auth(auth_functions),
     handler: (_req, reply) => {
       reply.send({ hello: 'world' });
     }
-  })
+  });
 }
 
 fastify.listen({ port: 3000 }, err => {
