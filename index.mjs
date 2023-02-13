@@ -1,3 +1,4 @@
+// https://www.npmjs.com/package/@databases/sqlite
 /*
 Register a user:
   curl -i "http://127.0.0.1:3000/register" -H "content-type: application/json" --data "{\"user\": \"myuser\",\"password\":\"mypass\"}"
@@ -6,18 +7,22 @@ Check it's all working
   curl "http://127.0.0.1:3000/auth" -H "content-type: application/json" --data "{\"user\": \"myuser\",\"password\":\"mypass\"}"
 */
 
-// https://www.npmjs.com/package/@databases/sqlite
-// https://www.npmjs.com/package/@databases/sqlite-sync
-
 'use strict';
 
 import Fastify from 'fastify';
-import LevelDB from '@fastify/leveldb';
 import Auth from '@fastify/auth';
+import connect, { sql } from '@databases/sqlite-sync';
+
+const db = connect();
+db.query(sql`
+CREATE TABLE users (
+  email TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL
+) STRICT`
+);
 
 const fastify = Fastify({ logger: true });
 
-fastify.register(LevelDB, { name: 'authdb' });
 fastify.register(Auth);
 fastify.after(routes);
 
@@ -27,26 +32,13 @@ function verifyUserAndPassword(request, _reply, done) {
     return;
   }
 
-  this.level.authdb.get(
-    request.body.user,
-    (err, password) => {
-      if (err) {
-        if (err.notFound) {
-          done(new Error('Password not valid'));
-        } else {
-          done(err);
-        }
-        return;
-      }
-
-      if (!password || password !== request.body.password) {
-        done(new Error('Password not valid'));
-        return;
-      }
-
-      done();
-    }
-  )
+  const pws = db.query(sql`
+SELECT password FROM users WHERE email=${request.body.user};`
+  );
+  if (pws.length !== 1 || pws[0].password !== request.body.password) {
+    done(new Error('Password not valid'));
+  }
+  done();
 }
 
 function routes() {
@@ -65,7 +57,11 @@ function routes() {
     },
     handler: (req, reply) => {
       req.log.info('Creating new user');
-      fastify.level.authdb.put(req.body.user, req.body.password, err => reply.send(err));
+      db.query(sql`
+REPLACE INTO users(email, password)
+VALUES(${req.body.user}, ${req.body.password});`
+      );
+      reply.send();
     }
   })
 

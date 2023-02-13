@@ -7,8 +7,8 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@databases/sqlite-sync": "^1.0.0",
     "@fastify/auth": "^4.2.0",
-    "@fastify/leveldb": "^5.0.1",
     "fastify": "^4.12.0"
   }
 }
