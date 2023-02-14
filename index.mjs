@@ -17,7 +17,8 @@ import { scryptSync } from 'crypto';
 const hash_pw = req_body =>
   scryptSync(
     req_body.password, 'gunn-alumni/backend/' + req_body.email,
-    128, { p: 5 }
+    128,
+    { p: 5 }
   );
 
 const db = connect();
