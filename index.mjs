@@ -12,12 +12,16 @@ curl "http://127.0.0.1:3000/auth" -H "content-type: application/json" --data "{\
 import Fastify from 'fastify';
 import Auth from '@fastify/auth';
 import connect, { sql } from '@databases/sqlite-sync';
+import { scryptSync } from 'crypto';
+
+const PREFIX = 'gunn-alumni/backend/'; // prepend to emails to create salt
+const KEYLEN = 128; // no idea what this is; this makes stuff fit on my terminal
 
 const db = connect();
 db.query(sql`
 CREATE TABLE users (
   email TEXT NOT NULL UNIQUE,
-  password TEXT NOT NULL
+  password BLOB NOT NULL UNIQUE
 ) STRICT`
 );
 
@@ -34,7 +38,7 @@ const auth_functions = [
     const pws = db.query(sql`
 SELECT password FROM users WHERE email=${req.body.email}`
     );
-    if (pws.length !== 1 || pws[0].password !== req.body.password) {
+    if (pws.length !== 1 || pws[0].password.compare(scryptSync(req.body.password, PREFIX + req.body.email, KEYLEN))) {
       done(new Error('Password not valid'));
     }
     done();
@@ -69,7 +73,7 @@ SELECT * FROM users`
     handler: (req, reply) => {
       db.query(sql`
 REPLACE INTO users(email, password)
-VALUES(${req.body.email}, ${req.body.password})`
+VALUES(${req.body.email}, ${scryptSync(req.body.password, PREFIX + req.body.email, KEYLEN)})`
       );
       reply.send();
     }
