@@ -14,8 +14,11 @@ import Auth from '@fastify/auth';
 import connect, { sql } from '@databases/sqlite-sync';
 import { scryptSync } from 'crypto';
 
-const PREFIX = 'gunn-alumni/backend/'; // prepend to emails to create salt
-const KEYLEN = 128; // no idea what this is; this makes stuff fit on my terminal
+const hash_pw = req_body =>
+  scryptSync(
+    req_body.password, 'gunn-alumni/backend/' + req_body.email,
+    128, { p: 5 }
+  );
 
 const db = connect();
 db.query(sql`
@@ -38,7 +41,7 @@ const auth_functions = [
     const pws = db.query(sql`
 SELECT password FROM users WHERE email=${req.body.email}`
     );
-    if (pws.length !== 1 || pws[0].password.compare(scryptSync(req.body.password, PREFIX + req.body.email, KEYLEN))) {
+    if (pws.length !== 1 || pws[0].password.compare(hash_pw(req.body))) {
       done(new Error('Password not valid'));
     }
     done();
@@ -73,7 +76,7 @@ SELECT * FROM users`
     handler: (req, reply) => {
       db.query(sql`
 REPLACE INTO users(email, password)
-VALUES(${req.body.email}, ${scryptSync(req.body.password, PREFIX + req.body.email, KEYLEN)})`
+VALUES(${req.body.email}, ${hash_pw(req.body)})`
       );
       reply.send();
     }
@@ -83,9 +86,7 @@ VALUES(${req.body.email}, ${scryptSync(req.body.password, PREFIX + req.body.emai
     method: 'POST',
     url: '/auth',
     preHandler: fastify.auth(auth_functions),
-    handler: (_req, reply) => {
-      reply.send({ hello: 'world' });
-    }
+    handler: (_req, reply) => reply.send({ hello: 'world' })
   });
 });
 
