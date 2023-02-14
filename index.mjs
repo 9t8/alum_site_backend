@@ -25,7 +25,7 @@ CREATE TABLE users (
 ) STRICT`
 );
 
-const fastify = Fastify({ logger: true });
+const fastify = Fastify();
 fastify.register(Auth);
 
 const auth_functions = [
