@@ -45,7 +45,7 @@ fastify.after(() => {
   fastify.route({
     method: 'GET',
     url: '/dumpusers',
-    handler: (req, reply) => {
+    handler: (_req, reply) => {
       console.table(db.query(sql`
 SELECT * FROM users`
       ));
