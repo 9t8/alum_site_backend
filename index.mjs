@@ -1,10 +1,9 @@
-// https://www.npmjs.com/package/@databases/sqlite
 /*
   Register a user:
 curl -i "http://127.0.0.1:3000/register" -H "content-type: application/json" --data "{\"email\": \"myuser\",\"password\":\"mypass\"}"
   The application then inserts user in the db
   Check it's all working
-curl "http://127.0.0.1:3000/auth" -H "content-type: application/json" --data "{\"email\": \"myuser\",\"password\":\"mypass\"}"
+curl "http://127.0.0.1:3000/" -H "content-type: application/json" --data "{\"email\": \"myuser\",\"password\":\"mypass\"}"
 */
 
 'use strict';
@@ -85,7 +84,7 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
 
   fastify.route({
     method: 'POST',
-    url: '/auth',
+    url: '/',
     preHandler: fastify.auth(auth_functions),
     handler: (_req, reply) => reply.send({ hello: 'world' })
   });
