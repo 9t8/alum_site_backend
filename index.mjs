@@ -1,9 +1,9 @@
 /*
   Register a user:
-curl -i "http://127.0.0.1:3000/register" -H "content-type: application/json" --data "{\"email\": \"myuser\",\"password\":\"mypass\"}"
+curl -i "http://127.0.0.1:3000/register" -H "content-type: application/json" --data "{\"email\": \"user@example.com\",\"password\":\"mypass\"}"
   The application then inserts user in the db
   Check it's all working
-curl "http://127.0.0.1:3000/" -H "content-type: application/json" --data "{\"email\": \"myuser\",\"password\":\"mypass\"}"
+curl "http://127.0.0.1:3000/" -H "content-type: application/json" --data "{\"email\": \"user@example.com\",\"password\":\"mypass\"}"
 */
 
 'use strict';
@@ -20,13 +20,7 @@ const hash_pw = req_body =>
     { p: 5 }
   );
 
-const db = connect();
-db.query(sql`
-CREATE TABLE users (
-  email TEXT NOT NULL UNIQUE,
-  password BLOB NOT NULL UNIQUE
-) STRICT`
-);
+const db = connect('db.sqlite3');
 
 const fastify = Fastify();
 fastify.register(Auth);
@@ -49,17 +43,6 @@ SELECT password FROM users WHERE email=${req.body.email}`
 ];
 
 fastify.after(() => {
-  fastify.route({
-    method: 'GET',
-    url: '/dumpusers',
-    handler: (_req, reply) => {
-      console.table(db.query(sql`
-SELECT * FROM users`
-      ));
-      reply.send();
-    }
-  });
-
   fastify.route({
     method: 'POST',
     url: '/register',
