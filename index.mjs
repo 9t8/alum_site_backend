@@ -20,11 +20,6 @@ const hash_pw = req_body =>
     { p: 5 }
   );
 
-const db = connect('db.sqlite3');
-
-const fastify = Fastify();
-fastify.register(Auth);
-
 const auth_functions = [
   (req, _reply, done) => {
     if (!req.body || !req.body.email) {
@@ -41,6 +36,11 @@ SELECT password FROM users WHERE email=${req.body.email}`
     done();
   }
 ];
+
+const db = connect('db.sqlite3');
+
+const fastify = Fastify();
+fastify.register(Auth);
 
 fastify.after(() => {
   fastify.route({
