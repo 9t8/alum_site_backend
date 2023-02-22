@@ -8,10 +8,11 @@ curl "http://127.0.0.1:3000/" -H "content-type: application/json" --data "{\"ema
 
 'use strict';
 
-import Fastify from 'fastify';
+import { scryptSync } from 'crypto';
 import Auth from '@fastify/auth';
 import connect, { sql } from '@databases/sqlite-sync';
-import { scryptSync } from 'crypto';
+import nodemailer from 'nodemailer';
+import Fastify from 'fastify';
 
 const hash_pw = req_body =>
   scryptSync(
@@ -38,6 +39,17 @@ SELECT password FROM users WHERE email=${req.body.email}`
 ];
 
 const db = connect('db.sqlite3');
+
+const transporter = nodemailer.createTransport({
+  streamTransport: true
+});
+
+transporter.sendMail({
+  from: 'fakeauth@gunnalum.site',
+  to: 'recipient@example.com',
+  subject: 'Fake Password Reset',
+  text: ':o'
+}, (_err, info) => info.message.pipe(process.stdout));
 
 const fastify = Fastify();
 fastify.register(Auth);
