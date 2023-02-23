@@ -1,0 +1,35 @@
+import Head from 'next/head'
+import Image from 'next/image'
+import { Inter } from '@next/font/google'
+import styles from '@/styles/Home.module.css'
+
+const inter = Inter({ subsets: ['latin'] })
+
+export default function Home() {
+  return (
+    <>
+<Head>
+	<title>Gunn Alumni</title>
+	<meta name="description" content="This is a place for Gunn alumni to reunite!" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="icon" href="/favicon.ico" />
+</Head>
+<main>
+	<form action="/api/newuser" method="POST">
+		<input type="text" name="a" />
+		<input type="submit" />SubmitMe
+	</form>
+
+	<button id="testsubmit">Submit2</button>
+
+	<script type="text/javascript">
+		document.getElementById("testsubmit").addEventListener("click", () => {
+			let xhr = new XMLHttpRequest;
+			xhr.open("POST", "/api/newuser");
+			xhr.send();
+		});
+	</script>
+</main>
+    </>
+  )
+}
