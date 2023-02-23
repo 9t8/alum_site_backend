@@ -1,11 +1,3 @@
-/*
-  Register a user:
-curl -i "http://127.0.0.1:3000/register" -H "content-type: application/json" --data "{\"email\": \"user@example.com\",\"password\":\"mypass\"}"
-  The application then inserts user in the db
-  Check it's all working
-curl "http://127.0.0.1:3000/" -H "content-type: application/json" --data "{\"email\": \"user@example.com\",\"password\":\"mypass\"}"
-*/
-
 'use strict';
 
 import { scryptSync } from 'crypto';
