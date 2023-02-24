@@ -76,6 +76,16 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
   fastify.route({
     method: 'POST',
     url: '/auth',
+    schema: {
+      body: {
+        type: 'object',
+        properties: {
+          email: { type: 'string' },
+          password: { type: 'string' }
+        },
+        required: ['email', 'password']
+      }
+    },
     preHandler: fastify.auth(auth_pw),
     handler: (_req, reply) => reply.send({ tok: 'TODO' })
   });
@@ -83,6 +93,16 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
   fastify.route({
     method: 'POST',
     url: '/reset-pw',
+    schema: {
+      body: {
+        type: 'object',
+        properties: {
+          email: { type: 'string' },
+          password: { type: 'string' }
+        },
+        required: ['email', 'password']
+      }
+    },
     preHandler: fastify.auth(auth_pw),
     handler: (_req, reply) => {
       transporter.sendMail({
