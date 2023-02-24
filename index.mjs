@@ -71,6 +71,30 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
     }
   });
 
+  fastify.route({
+    method: 'POST',
+    url: '/reset-pw',
+    schema: {
+      body: {
+        type: 'object',
+        properties: {
+          email: { type: 'string' }
+        },
+        required: ['email']
+      }
+    },
+    handler: (_req, reply) => {
+      transporter.sendMail({
+        from: 'fakeauth@gunnalum.site',
+        to: 'fakeuser@example.com',
+        subject: 'Fake Password Reset',
+        text: 'test email text.'
+      }, (_err, info) => info.message.pipe(process.stdout));
+
+      reply.send({ tok: 'TODO' });
+    }
+  });
+
   // require password
 
   fastify.route({
@@ -88,32 +112,6 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
     },
     preHandler: fastify.auth(auth_pw),
     handler: (_req, reply) => reply.send({ tok: 'TODO' })
-  });
-
-  fastify.route({
-    method: 'POST',
-    url: '/reset-pw',
-    schema: {
-      body: {
-        type: 'object',
-        properties: {
-          email: { type: 'string' },
-          password: { type: 'string' }
-        },
-        required: ['email', 'password']
-      }
-    },
-    preHandler: fastify.auth(auth_pw),
-    handler: (_req, reply) => {
-      transporter.sendMail({
-        from: 'fakeauth@gunnalum.site',
-        to: 'fakeuser@example.com',
-        subject: 'Fake Password Reset',
-        text: 'test email text.'
-      }, (_err, info) => info.message.pipe(process.stdout));
-
-      reply.send({ tok: 'TODO' });
-    }
   });
 
   // require tok
