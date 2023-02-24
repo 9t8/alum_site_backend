@@ -13,10 +13,10 @@ const hash_pw = req_body =>
     { p: 5 }
   );
 
-const auth_functions = [
+const auth_pw = [
   (req, _reply, done) => {
     if (!req.body || !req.body.email) {
-      done(new Error('Missing email in request body'));
+      done(Error('missing email in request body'));
       return;
     }
 
@@ -24,9 +24,15 @@ const auth_functions = [
 SELECT password FROM users WHERE email=${req.body.email}`
     );
     if (pws.length !== 1 || pws[0].password.compare(hash_pw(req.body))) {
-      done(new Error('Password not valid'));
+      done(Error('incorrect password'));
     }
     done();
+  }
+];
+
+const auth_tok = [
+  (req, _reply, done) => {
+    done(Error('TODO'));
   }
 ];
 
@@ -36,17 +42,12 @@ const transporter = nodemailer.createTransport({
   streamTransport: true
 });
 
-transporter.sendMail({
-  from: 'fakeauth@gunnalum.site',
-  to: 'recipient@example.com',
-  subject: 'Fake Password Reset',
-  text: ':o'
-}, (_err, info) => info.message.pipe(process.stdout));
-
 const fastify = Fastify();
 fastify.register(Auth);
 
 fastify.after(() => {
+  // no auth
+
   fastify.route({
     method: 'POST',
     url: '/register',
@@ -61,6 +62,7 @@ fastify.after(() => {
       }
     },
     handler: (req, reply) => {
+      // todo: check that user does not exist
       db.query(sql`
 REPLACE INTO users(email, password)
 VALUES(${req.body.email}, ${hash_pw(req.body)})`
@@ -69,11 +71,38 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
     }
   });
 
+  // require password
+
   fastify.route({
     method: 'POST',
-    url: '/',
-    preHandler: fastify.auth(auth_functions),
-    handler: (_req, reply) => reply.send({ hello: 'world' })
+    url: '/auth',
+    preHandler: fastify.auth(auth_pw),
+    handler: (_req, reply) => reply.send({ tok: 'TODO' })
+  });
+
+  fastify.route({
+    method: 'POST',
+    url: '/reset-pw',
+    preHandler: fastify.auth(auth_pw),
+    handler: (_req, reply) => {
+      transporter.sendMail({
+        from: 'fakeauth@gunnalum.site',
+        to: 'fakeuser@example.com',
+        subject: 'Fake Password Reset',
+        text: 'test email text.'
+      }, (_err, info) => info.message.pipe(process.stdout));
+
+      reply.send({ tok: 'TODO' });
+    }
+  });
+
+  // require tok
+
+  fastify.route({
+    method: 'POST',
+    url: '/test-tok',
+    preHandler: fastify.auth(auth_tok),
+    handler: (_req, reply) => reply.send({ content: 'successfully authenticated' })
   });
 });
 
