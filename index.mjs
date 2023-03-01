@@ -1,10 +1,10 @@
 'use strict';
 
 import crypto from 'crypto';
-import fastifyAuth from '@fastify/auth';
 import connect, { sql } from '@databases/sqlite-sync';
 import nodemailer from 'nodemailer';
 import fastify from 'fastify';
+import fastifyEsso from 'fastify-esso';
 
 const hash_pw = req_body =>
   crypto.scryptSync(
@@ -13,41 +13,27 @@ const hash_pw = req_body =>
     { p: 5 }
   );
 
-const auth_pw = [
-  (req, _reply, done) => {
-    if (!req.body || !req.body.email) {
-      done(Error('missing email in request body'));
-      return;
-    }
-
-    const pws = db.query(sql`
-SELECT password FROM users WHERE email=${req.body.email}`
-    );
-    if (pws.length !== 1 || !crypto.timingSafeEqual(pws[0].password, hash_pw(req.body))) {
-      done(Error('incorrect password'));
-    }
-    done();
-  }
-];
-
-const auth_tok = [
-  (req, _reply, done) => {
-    done(Error('TODO'));
-  }
-];
-
 const db = connect('db.sqlite3');
 
 const transporter = nodemailer.createTransport({
   streamTransport: true
 });
 
+async function privateRoutes(server) {
+  server.requireAuthentication(server);
+
+  server.route({
+    method: 'POST',
+    url: '/test-tok',
+    handler: (req, reply) => reply.send({ content: req.auth.email + ' successfully authenticated' })
+  });
+}
+
 const server = fastify();
-server.register(fastifyAuth);
+server.register(fastifyEsso({ secret: 'fixme: set up secret' }));
+server.register(privateRoutes);
 
 server.after(() => {
-  // no auth
-
   server.route({
     method: 'POST',
     url: '/register',
@@ -62,7 +48,7 @@ server.after(() => {
       }
     },
     handler: (req, reply) => {
-      // todo: check that user does not exist
+      // fixme: check that user does not exist
       db.query(sql`
 REPLACE INTO users(email, password)
 VALUES(${req.body.email}, ${hash_pw(req.body)})`
@@ -95,33 +81,24 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
     }
   });
 
-  // require password
-
-  server.route({
-    method: 'POST',
-    url: '/auth',
-    schema: {
-      body: {
-        type: 'object',
-        properties: {
-          email: { type: 'string' },
-          password: { type: 'string' }
-        },
-        required: ['email', 'password']
+  server.post( // todo: add schema?
+    '/auth',
+    async (req, _reply) => {
+      if (!req.body || !req.body.email) {
+        return Error('missing email in request body');
       }
-    },
-    preHandler: server.auth(auth_pw),
-    handler: (_req, reply) => reply.send({ tok: 'TODO' })
-  });
 
-  // require tok
+      const pws = db.query(sql`
+      SELECT password FROM users WHERE email=${req.body.email}`
+      );
 
-  server.route({
-    method: 'POST',
-    url: '/test-tok',
-    preHandler: server.auth(auth_tok),
-    handler: (_req, reply) => reply.send({ content: 'successfully authenticated' })
-  });
+      if (pws.length !== 1 || !crypto.timingSafeEqual(pws[0].password, hash_pw(req.body))) {
+        return Error('incorrect password');
+      }
+      // fixme: make more secure
+      return server.generateAuthToken({ email: req.body.email });
+    }
+  );
 });
 
 server.listen({ port: 3000 }, err => {
