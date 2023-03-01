@@ -1,10 +1,10 @@
 'use strict';
 
 import { scryptSync } from 'crypto';
-import Auth from '@fastify/auth';
+import fastifyAuth from '@fastify/auth';
 import connect, { sql } from '@databases/sqlite-sync';
 import nodemailer from 'nodemailer';
-import Fastify from 'fastify';
+import fastify from 'fastify';
 
 const hash_pw = req_body =>
   scryptSync(
@@ -42,13 +42,13 @@ const transporter = nodemailer.createTransport({
   streamTransport: true
 });
 
-const fastify = Fastify();
-fastify.register(Auth);
+const server = fastify();
+server.register(fastifyAuth);
 
-fastify.after(() => {
+server.after(() => {
   // no auth
 
-  fastify.route({
+  server.route({
     method: 'POST',
     url: '/register',
     schema: {
@@ -71,7 +71,7 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
     }
   });
 
-  fastify.route({
+  server.route({
     method: 'POST',
     url: '/reset-pw',
     schema: {
@@ -97,7 +97,7 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
 
   // require password
 
-  fastify.route({
+  server.route({
     method: 'POST',
     url: '/auth',
     schema: {
@@ -110,21 +110,21 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
         required: ['email', 'password']
       }
     },
-    preHandler: fastify.auth(auth_pw),
+    preHandler: server.auth(auth_pw),
     handler: (_req, reply) => reply.send({ tok: 'TODO' })
   });
 
   // require tok
 
-  fastify.route({
+  server.route({
     method: 'POST',
     url: '/test-tok',
-    preHandler: fastify.auth(auth_tok),
+    preHandler: server.auth(auth_tok),
     handler: (_req, reply) => reply.send({ content: 'successfully authenticated' })
   });
 });
 
-fastify.listen({ port: 3000 }, err => {
+server.listen({ port: 3000 }, err => {
   if (err) {
     throw err;
   }
