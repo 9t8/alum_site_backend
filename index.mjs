@@ -1,13 +1,13 @@
 'use strict';
 
-import { scryptSync } from 'crypto';
+import crypto from 'crypto';
 import fastifyAuth from '@fastify/auth';
 import connect, { sql } from '@databases/sqlite-sync';
 import nodemailer from 'nodemailer';
 import fastify from 'fastify';
 
 const hash_pw = req_body =>
-  scryptSync(
+  crypto.scryptSync(
     req_body.password, 'gunn-alumni/backend/' + req_body.email,
     128,
     { p: 5 }
@@ -23,7 +23,7 @@ const auth_pw = [
     const pws = db.query(sql`
 SELECT password FROM users WHERE email=${req.body.email}`
     );
-    if (pws.length !== 1 || pws[0].password.compare(hash_pw(req.body))) {
+    if (pws.length !== 1 || !crypto.timingSafeEqual(pws[0].password, hash_pw(req.body))) {
       done(Error('incorrect password'));
     }
     done();
