@@ -29,9 +29,9 @@ async function privateRoutes(server) {
   );
 }
 
-const server = fastify();
-server.register(fastifyEsso({ secret: 'fixme: set up secret' }));
-server.register(privateRoutes);
+const server = fastify()
+  .register(fastifyEsso({ secret: 'fixme: set up secret' }))
+  .register(privateRoutes);
 
 server.after(() => {
   server.post(
