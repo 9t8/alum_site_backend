@@ -22,11 +22,11 @@ const transporter = nodemailer.createTransport({
 async function privateRoutes(server) {
   server.requireAuthentication(server);
 
-  server.route({
-    method: 'POST',
-    url: '/test-tok',
-    handler: (req, reply) => reply.send({ content: req.auth.email + ' successfully authenticated' })
-  });
+  server.get('/test-tok',
+    async (req, _reply) => {
+      return { content: req.auth.email + ' successfully authenticated' };
+    }
+  );
 }
 
 const server = fastify();
@@ -34,42 +34,21 @@ server.register(fastifyEsso({ secret: 'fixme: set up secret' }));
 server.register(privateRoutes);
 
 server.after(() => {
-  server.route({
-    method: 'POST',
-    url: '/register',
-    schema: {
-      body: {
-        type: 'object',
-        properties: {
-          email: { type: 'string' },
-          password: { type: 'string' }
-        },
-        required: ['email', 'password']
-      }
-    },
-    handler: (req, reply) => {
-      // fixme: check that user does not exist
+  server.post(
+    '/register',
+    async (req, _reply) => {
+      // fixme: comfirm that user does not exist
       db.query(sql`
 REPLACE INTO users(email, password)
 VALUES(${req.body.email}, ${hash_pw(req.body)})`
       );
-      reply.send();
+      return;
     }
-  });
+  );
 
-  server.route({
-    method: 'POST',
-    url: '/reset-pw',
-    schema: {
-      body: {
-        type: 'object',
-        properties: {
-          email: { type: 'string' }
-        },
-        required: ['email']
-      }
-    },
-    handler: (_req, reply) => {
+  server.post(
+    '/reset-pw',
+    async (_req, _reply) => {
       transporter.sendMail({
         from: 'fakeauth@gunnalum.site',
         to: 'fakeuser@example.com',
@@ -77,11 +56,11 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
         text: 'test email text.'
       }, (_err, info) => info.message.pipe(process.stdout));
 
-      reply.send({ tok: 'TODO' });
+      return Error('fixme');
     }
-  });
+  );
 
-  server.post( // todo: add schema?
+  server.post(
     '/auth',
     async (req, _reply) => {
       if (!req.body || !req.body.email) {
@@ -89,7 +68,7 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
       }
 
       const pws = db.query(sql`
-      SELECT password FROM users WHERE email=${req.body.email}`
+SELECT password FROM users WHERE email=${req.body.email}`
       );
 
       if (pws.length !== 1 || !crypto.timingSafeEqual(pws[0].password, hash_pw(req.body))) {
