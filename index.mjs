@@ -15,6 +15,7 @@ const hash_pw = req_body =>
 
 const db = connect('db.sqlite3');
 
+// todo: use mailjet to actually send emails
 const transporter = nodemailer.createTransport({
   streamTransport: true
 });
@@ -49,6 +50,7 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
   server.post(
     '/reset-pw',
     async (_req, _reply) => {
+      // todo: make this work
       transporter.sendMail({
         from: 'fakeauth@gunnalum.site',
         to: 'fakeuser@example.com',
@@ -80,8 +82,6 @@ SELECT password FROM users WHERE email=${req.body.email}`
   );
 });
 
-server.listen({ port: 3000 }, err => {
-  if (err) {
-    throw err;
-  }
+server.listen({ port: process.env.BACKEND_PORT }).then(address => {
+  console.log(address);
 });
