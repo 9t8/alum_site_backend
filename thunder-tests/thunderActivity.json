@@ -1,0 +1,58 @@
+[
+  {
+    "_id": "a2648fa0-d472-4839-90d2-065ed3ff915d",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://[::1]:{{BACKEND_PORT}}/register",
+    "url": "http://[::1]:{{BACKEND_PORT}}/register",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-03-06T01:50:28.769Z",
+    "modified": "2023-03-06T01:50:34.818Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"1234\"\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "febb41b2-27ff-4682-a908-8f93306a2695",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://[::1]:{{BACKEND_PORT}}/auth",
+    "url": "http://[::1]:{{BACKEND_PORT}}/auth",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-03-06T01:51:15.058Z",
+    "modified": "2023-03-06T01:51:15.058Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"1234\"\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "08587371-0a49-4f8c-8c30-c46bf7cadb11",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://[::1]:{{BACKEND_PORT}}/test-tok",
+    "url": "http://[::1]:{{BACKEND_PORT}}/test-tok",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-03-06T01:51:56.755Z",
+    "modified": "2023-03-06T01:51:56.755Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "847f266d6617de410ff62b54934633d3041d42dffbd4ceac7718daff48af045e5545183655037907c97c010370d4d259"
+    },
+    "tests": []
+  }
+]

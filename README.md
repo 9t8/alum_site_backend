@@ -12,4 +12,5 @@ make sure you did not
 * blow up the db
 ## useful extensions
 * [thunder client](https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client) for testing the api (todo postman?)
-* [sqlite3 editor](https://marketplace.visualstudio.com/items?itemName=yy0931.vscode-sqlite3-editor) for viewing and manipulating the db (you will need python)
+  * enable `thunder-client.saveToWorkspace`
+* [sqlite3 editor](https://marketplace.visualstudio.com/items?itemName=yy0931.vscode-sqlite3-editor) for viewing and manipulating the db (depends on python installation)
