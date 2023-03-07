@@ -46,7 +46,12 @@ server.after(() => {
   server.post(
     '/register',
     async (req, _reply) => {
-      // fixme: mask error when user does not exist
+      if (db.query(sql`
+      SELECT email FROM users WHERE email=${req.body.email}`
+      ).length !== 0) {
+        return Error('user already exists');
+      }
+
       db.query(sql`
       INSERT INTO users (email, password) VALUES
         (${req.body.email}, ${hash(req.body)})`
