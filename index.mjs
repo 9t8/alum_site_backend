@@ -23,7 +23,8 @@ const transporter = nodemailer.createTransport({
 async function privateRoutes(server) {
   server.requireAuthentication(server);
 
-  server.get('/test-tok',
+  server.get(
+    '/test-tok',
     async (req, _reply) => {
       return { content: req.auth.email + ' successfully authenticated' };
     }
@@ -35,12 +36,19 @@ const server = fastify()
   .register(privateRoutes);
 
 server.after(() => {
+  server.get(
+    '/alums',
+    async (req, _reply) => {
+      return { alums: db.query(sql`SELECT * FROM ALUMS`) };
+    }
+  );
+
   server.post(
     '/register',
     async (req, _reply) => {
       // fixme: comfirm that user does not exist
       db.query(sql`
-REPLACE INTO users(email, password)
+REPLACE INTO users (email, password)
 VALUES(${req.body.email}, ${hash_pw(req.body)})`
       );
       return;

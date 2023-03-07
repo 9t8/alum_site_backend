@@ -54,5 +54,19 @@
       "bearer": "847f266d6617de410ff62b54934633d3041d42dffbd4ceac7718daff48af045e5545183655037907c97c010370d4d259"
     },
     "tests": []
+  },
+  {
+    "_id": "cf95d372-ecfa-4a61-86cc-0cf024dc7090",
+    "colId": "history",
+    "containerId": "",
+    "name": "[::1]:{{BACKEND_PORT}}/alums",
+    "url": "[::1]:{{BACKEND_PORT}}/alums",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-03-07T23:03:03.849Z",
+    "modified": "2023-03-07T23:03:03.849Z",
+    "headers": [],
+    "params": [],
+    "tests": []
   }
 ]
