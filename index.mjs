@@ -48,8 +48,8 @@ server.after(() => {
     async (req, _reply) => {
       // fixme: mask error when user does not exist
       db.query(sql`
-INSERT INTO users (email, password) VALUES
-  (${req.body.email}, ${hash(req.body)})`
+      INSERT INTO users (email, password) VALUES
+        (${req.body.email}, ${hash(req.body)})`
       );
       return;
     }
@@ -78,7 +78,7 @@ INSERT INTO users (email, password) VALUES
       }
 
       const pws = db.query(sql`
-SELECT password FROM users WHERE email=${req.body.email}`
+      SELECT password FROM users WHERE email=${req.body.email}`
       );
 
       if (pws.length !== 1 || !crypto.timingSafeEqual(pws[0].password, hash(req.body))) {
