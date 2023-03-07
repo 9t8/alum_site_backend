@@ -9,6 +9,6 @@ db.query(sql`DROP TABLE users`);
 db.query(sql`
 CREATE TABLE users (
   email TEXT NOT NULL UNIQUE,
-  password BLOB NOT NULL UNIQUE
+  password BLOB NOT NULL
 ) STRICT`
 );
