@@ -93,8 +93,6 @@ server.after(() => {
       return server.generateAuthToken({ email: req.body.email });
     }
   );
-});
-
-server.listen({ port: process.env.BACKEND_PORT }).then(address => {
+}).listen({ port: process.env.BACKEND_PORT }).then(address => {
   console.log(address);
 });
