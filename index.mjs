@@ -6,7 +6,7 @@ import nodemailer from 'nodemailer';
 import fastify from 'fastify';
 import fastifyEsso from 'fastify-esso';
 
-const hash_pw = req_body =>
+const hash = req_body =>
   crypto.scryptSync(
     req_body.password, 'gunn-alumni/backend/' + req_body.email,
     128,
@@ -49,7 +49,7 @@ server.after(() => {
       // fixme: comfirm that user does not exist
       db.query(sql`
 REPLACE INTO users (email, password)
-VALUES(${req.body.email}, ${hash_pw(req.body)})`
+VALUES(${req.body.email}, ${hash(req.body)})`
       );
       return;
     }
@@ -81,7 +81,7 @@ VALUES(${req.body.email}, ${hash_pw(req.body)})`
 SELECT password FROM users WHERE email=${req.body.email}`
       );
 
-      if (pws.length !== 1 || !crypto.timingSafeEqual(pws[0].password, hash_pw(req.body))) {
+      if (pws.length !== 1 || !crypto.timingSafeEqual(pws[0].password, hash(req.body))) {
         return Error('incorrect password');
       }
       // fixme: make more secure
