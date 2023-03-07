@@ -48,8 +48,8 @@ server.after(() => {
     async (req, _reply) => {
       // fixme: mask error when user does not exist
       db.query(sql`
-INSERT INTO users (email, password)
-VALUES(${req.body.email}, ${hash(req.body)})`
+INSERT INTO users (email, password) VALUES
+  (${req.body.email}, ${hash(req.body)})`
       );
       return;
     }
