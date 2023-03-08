@@ -1,5 +1,8 @@
 'use strict';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 import crypto from 'crypto';
 import connect, { sql } from '@databases/sqlite-sync';
 import nodemailer from 'nodemailer';
