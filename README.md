@@ -1,5 +1,5 @@
 # backend
-`yarn` to install deps
+`npm install` to install deps
 
 run `db/reset_*.mjs` to create nessecary tables
 
