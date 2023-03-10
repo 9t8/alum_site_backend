@@ -46,12 +46,12 @@
     "method": "GET",
     "sortNum": 0,
     "created": "2023-03-06T01:51:56.755Z",
-    "modified": "2023-03-06T01:51:56.755Z",
+    "modified": "2023-03-10T07:52:59.566Z",
     "headers": [],
     "params": [],
     "auth": {
       "type": "bearer",
-      "bearer": "847f266d6617de410ff62b54934633d3041d42dffbd4ceac7718daff48af045e5545183655037907c97c010370d4d259"
+      "bearer": "619b7151edd740c3a2c5b498f671911f75d5f1ac78cdd6c210a0541f48b4cb5b5229f94ee4abe856580d735bdfb55710"
     },
     "tests": []
   },
