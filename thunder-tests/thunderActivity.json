@@ -60,23 +60,21 @@
     "colId": "history",
     "containerId": "",
     "name": "[::1]:{{BACKEND_PORT}}/alums",
-    "url": "[::1]:{{BACKEND_PORT}}/alums",
+    "url": "[::1]:{{BACKEND_PORT}}/alums?beginYear=2000&endYear=2024",
     "method": "GET",
     "sortNum": 0,
     "created": "2023-03-07T23:03:03.849Z",
-    "modified": "2023-03-10T05:51:22.042Z",
+    "modified": "2023-03-10T06:21:03.704Z",
     "headers": [],
     "params": [
       {
         "name": "beginYear",
         "value": "2000",
-        "isDisabled": true,
         "isPath": false
       },
       {
         "name": "endYear",
         "value": "2024",
-        "isDisabled": true,
         "isPath": false
       }
     ],

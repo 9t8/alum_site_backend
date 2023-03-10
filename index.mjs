@@ -1,13 +1,14 @@
 'use strict';
-
 import dotenv from 'dotenv';
 dotenv.config();
 
-import crypto from 'crypto';
 import connect, { sql } from '@databases/sqlite-sync';
+import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import fastify from 'fastify';
 import fastifyEsso from 'fastify-esso';
+
+const db = connect(process.env.DB_PATH);
 
 const hash = req_body =>
   crypto.scryptSync(
@@ -15,8 +16,6 @@ const hash = req_body =>
     128,
     { p: 5 }
   );
-
-const db = connect('db.sqlite3');
 
 // todo: use mailjet to actually send emails
 const transporter = nodemailer.createTransport({
