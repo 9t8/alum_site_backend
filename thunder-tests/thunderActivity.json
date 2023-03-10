@@ -27,7 +27,7 @@
     "method": "POST",
     "sortNum": 0,
     "created": "2023-03-06T01:51:15.058Z",
-    "modified": "2023-03-06T01:51:15.058Z",
+    "modified": "2023-03-10T04:27:51.234Z",
     "headers": [],
     "params": [],
     "body": {
@@ -60,13 +60,24 @@
     "colId": "history",
     "containerId": "",
     "name": "[::1]:{{BACKEND_PORT}}/alums",
-    "url": "[::1]:{{BACKEND_PORT}}/alums",
+    "url": "[::1]:{{BACKEND_PORT}}/alums?beginYear=2000&endYear=2024",
     "method": "GET",
     "sortNum": 0,
     "created": "2023-03-07T23:03:03.849Z",
-    "modified": "2023-03-07T23:03:03.849Z",
+    "modified": "2023-03-10T05:37:11.996Z",
     "headers": [],
-    "params": [],
+    "params": [
+      {
+        "name": "beginYear",
+        "value": "2000",
+        "isPath": false
+      },
+      {
+        "name": "endYear",
+        "value": "2024",
+        "isPath": false
+      }
+    ],
     "tests": []
   }
 ]

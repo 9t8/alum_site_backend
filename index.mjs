@@ -42,7 +42,27 @@ server.after(() => {
   server.get(
     '/alums',
     async (req, _reply) => {
-      return { alums: db.query(sql`SELECT * FROM ALUMS`) };
+      let query;
+      if (req.query.beginYear) {
+        if (req.query.endYear) {
+          query = sql`SELECT name, year FROM alums
+            WHERE year BETWEEN ${req.query.beginYear} AND ${req.query.endYear}
+            ORDER BY year`;
+        } else {
+          query = sql`SELECT name, year FROM alums
+            WHERE year >= ${req.query.beginYear}
+            ORDER BY year`;
+        }
+      } else if (req.query.endYear) {
+        query = sql`SELECT name, year FROM alums
+          WHERE year <= ${req.query.endYear}
+          ORDER BY year`;
+      }
+      query ||= sql`SELECT name, year FROM alums
+      ORDER BY year`;
+
+      let results = db.query(query);
+      return { result: results };
     }
   );
 
