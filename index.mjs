@@ -47,22 +47,28 @@ server.after(() => {
         if (req.query.endYear) {
           query = sql`SELECT name, year FROM alums
             WHERE year BETWEEN ${req.query.beginYear} AND ${req.query.endYear}
-            ORDER BY year`;
+            ORDER BY name`;
         } else {
           query = sql`SELECT name, year FROM alums
             WHERE year >= ${req.query.beginYear}
-            ORDER BY year`;
+            ORDER BY name`;
         }
       } else if (req.query.endYear) {
         query = sql`SELECT name, year FROM alums
           WHERE year <= ${req.query.endYear}
-          ORDER BY year`;
+          ORDER BY name`;
       }
       query ||= sql`SELECT name, year FROM alums
-      ORDER BY year`;
+      ORDER BY name`;
 
-      let results = db.query(query);
-      return { result: results };
+      const results = {};
+      for (const alum of db.query(query)) {
+        if (!results[alum.year]) {
+          results[alum.year] = [];
+        }
+        results[alum.year].push((({ year, ...rest }) => rest)(alum));
+      }
+      return results;
     }
   );
 
