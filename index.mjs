@@ -44,21 +44,23 @@ server.after(() => {
       let query;
       if (req.query.beginYear) {
         if (req.query.endYear) {
-          query = sql`SELECT name, year FROM alums
-            WHERE year BETWEEN ${req.query.beginYear} AND ${req.query.endYear}
-            ORDER BY name`;
+          query = sql`
+          SELECT name, year FROM alums
+          WHERE year BETWEEN ${req.query.beginYear} AND ${req.query.endYear}
+          ORDER BY name`;
         } else {
-          query = sql`SELECT name, year FROM alums
-            WHERE year >= ${req.query.beginYear}
-            ORDER BY name`;
+          query = sql`
+          SELECT name, year FROM alums
+          WHERE year >= ${req.query.beginYear}
+          ORDER BY name`;
         }
       } else if (req.query.endYear) {
-        query = sql`SELECT name, year FROM alums
-          WHERE year <= ${req.query.endYear}
-          ORDER BY name`;
+        query = sql`
+        SELECT name, year FROM alums
+        WHERE year <= ${req.query.endYear}
+        ORDER BY name`;
       }
-      query ||= sql`SELECT name, year FROM alums
-      ORDER BY name`;
+      query ||= sql`SELECT name, year FROM alums ORDER BY name`;
 
       const results = {};
       for (const alum of db.query(query)) {

@@ -4,18 +4,14 @@ dotenv.config();
 
 import connect, { sql } from '@databases/sqlite-sync';
 
-const db = connect(process.env.DB_PATH);
+connect(process.env.DB_PATH).query(sql`
+DROP TABLE IF EXISTS alums;
 
-db.query(sql`DROP TABLE IF EXISTS alums`);
-
-db.query(sql`
 CREATE TABLE alums (
   name TEXT NOT NULL,
   year INT NOT NULL
-) STRICT`
-);
+) STRICT;
 
-db.query(sql`
 INSERT INTO alums VALUES
   ('Bobby Boomer', 2000),
   ('David Li', 2024),
