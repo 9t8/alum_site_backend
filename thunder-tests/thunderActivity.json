@@ -4,11 +4,11 @@
     "colId": "history",
     "containerId": "",
     "name": "http://[::1]:{{BACKEND_PORT}}/register",
-    "url": "http://[::1]:{{BACKEND_PORT}}/register",
+    "url": "[::1]:{{BACKEND_PORT}}/register",
     "method": "POST",
     "sortNum": 0,
     "created": "2023-03-06T01:50:28.769Z",
-    "modified": "2023-03-06T01:50:34.818Z",
+    "modified": "2023-03-11T02:17:51.885Z",
     "headers": [],
     "params": [],
     "body": {
@@ -23,11 +23,11 @@
     "colId": "history",
     "containerId": "",
     "name": "http://[::1]:{{BACKEND_PORT}}/auth",
-    "url": "http://[::1]:{{BACKEND_PORT}}/auth",
+    "url": "[::1]:{{BACKEND_PORT}}/auth",
     "method": "POST",
     "sortNum": 0,
     "created": "2023-03-06T01:51:15.058Z",
-    "modified": "2023-03-10T04:27:51.234Z",
+    "modified": "2023-03-11T02:17:58.481Z",
     "headers": [],
     "params": [],
     "body": {
@@ -42,11 +42,11 @@
     "colId": "history",
     "containerId": "",
     "name": "http://[::1]:{{BACKEND_PORT}}/test-tok",
-    "url": "http://[::1]:{{BACKEND_PORT}}/test-tok",
+    "url": "[::1]:{{BACKEND_PORT}}/test-tok",
     "method": "GET",
     "sortNum": 0,
     "created": "2023-03-06T01:51:56.755Z",
-    "modified": "2023-03-10T07:52:59.566Z",
+    "modified": "2023-03-11T02:18:05.823Z",
     "headers": [],
     "params": [],
     "auth": {
@@ -78,6 +78,25 @@
         "isPath": false
       }
     ],
+    "tests": []
+  },
+  {
+    "_id": "5ee455b7-7eb3-4db3-953a-c07ca6e97743",
+    "colId": "history",
+    "containerId": "",
+    "name": "[::1]:{{BACKEND_PORT}}/reset-pw",
+    "url": "[::1]:{{BACKEND_PORT}}/reset-pw",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-03-11T02:18:38.440Z",
+    "modified": "2023-03-11T02:18:38.440Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"email\": \"user@example.com\"\n}",
+      "form": []
+    },
     "tests": []
   }
 ]

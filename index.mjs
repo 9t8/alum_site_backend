@@ -92,12 +92,12 @@ server.after(() => {
 
   server.post(
     '/reset-pw',
-    async (_req, _reply) => {
+    async (req, _reply) => {
       // todo: make this work
       transporter.sendMail({
         from: 'fakeauth@gunnalum.site',
-        to: 'fakeuser@example.com',
-        subject: 'Fake Password Reset',
+        to: req.body.email,
+        subject: 'WEBSITE NAME Password Reset',
         text: 'test email text.'
       }, (_err, info) => info.message.pipe(process.stdout));
 
