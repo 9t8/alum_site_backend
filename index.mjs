@@ -34,12 +34,7 @@ async function privateRoutes(server) {
   );
 }
 
-const server = fastify()
-  .register(cors)
-  .register(fastifyEsso({ secret: process.env.ESSO_SECRET }))
-  .register(privateRoutes);
-
-server.after(() => {
+async function publicRoutes(server) {
   server.get(
     '/alums',
     async (req, _reply) => {
@@ -125,6 +120,13 @@ server.after(() => {
       return server.generateAuthToken({ email: req.body.email });
     }
   );
-}).listen({ port: process.env.BACKEND_PORT }).then(address => {
-  console.log(address);
-});
+}
+
+const server = fastify()
+  .register(cors)
+  .register(fastifyEsso({ secret: process.env.ESSO_SECRET }))
+  .register(privateRoutes)
+  .register(publicRoutes)
+  .listen({ port: process.env.BACKEND_PORT }).then(address => {
+    console.log(address);
+  });
