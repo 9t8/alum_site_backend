@@ -1,4 +1,6 @@
 # backend
+after cloning github check if package.json has `"type": "module"`, if not then add it before installing the deps.
+
 `npm install` to install deps.
 
 create a `.env` file with the following contents:
