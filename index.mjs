@@ -6,6 +6,7 @@ import connect, { sql } from '@databases/sqlite-sync';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import fastify from 'fastify';
+import cors from '@fastify/cors';
 import fastifyEsso from 'fastify-esso';
 
 const db = connect(process.env.DB_PATH);
@@ -34,6 +35,7 @@ async function privateRoutes(server) {
 }
 
 const server = fastify()
+  .register(cors)
   .register(fastifyEsso({ secret: process.env.ESSO_SECRET }))
   .register(privateRoutes);
 
