@@ -10,7 +10,7 @@ ESSO_SECRET=DEVELOPMENT_AND_TESTING # so we can share the db for now
 BACKEND_PORT=9999 # you may change this
 ```
 
-run `db/reset_*.mjs` to create nessecary tables.
+run `db/reset_*.mjs` to create nessecary tables. If it doesn't let you, then run the files in the db folder seperately.
 
 "Run and Debug" in VS Code to run server.
 
