@@ -25,4 +25,4 @@ code is mostly untested.
 don't put sensitive/important/large data in the db.
 
 ## useful extensions
-[sqlite3 editor](https://marketplace.visualstudio.com/items?itemName=yy0931.vscode-sqlite3-editor) for viewing and manipulating the db (depends on python installation).
+[sqlite3 editor](https://marketplace.visualstudio.com/items?itemName=yy0931.vscode-sqlite3-editor) for viewing and manipulating the db (requires python installation).

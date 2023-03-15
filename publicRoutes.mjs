@@ -1,6 +1,4 @@
 'use strict';
-import dotenv from 'dotenv';
-dotenv.config();
 
 import connect, { sql } from '@databases/sqlite-sync';
 import crypto from 'crypto';
