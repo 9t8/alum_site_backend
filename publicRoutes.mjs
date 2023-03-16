@@ -101,7 +101,10 @@ export async function publicRoutes(server) {
         return Error('incorrect password');
       }
       // fixme: make more secure
-      return server.generateAuthToken({ email: req.body.email });
+      return server.generateAuthToken({
+        email: req.body.email,
+        valid: 'yeah!'
+      });
     }
   );
 }
