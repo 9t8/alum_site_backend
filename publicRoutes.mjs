@@ -81,7 +81,8 @@ export async function publicRoutes(server) {
         return Error('person is taken');
       }
 
-      const new_uid = db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
+      const new_uid
+        = db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
       db.query(sql`
         INSERT INTO users (id, email, password) VALUES
           (${new_uid}, ${req.body.email}, ${hash(req.body)})
@@ -112,11 +113,12 @@ export async function publicRoutes(server) {
         return Error('missing email in request body');
       }
 
-      const pws = db.query(sql`
+      const passwords = db.query(sql`
         SELECT password FROM users WHERE email=${req.body.email}
       `);
 
-      if (pws.length !== 1 || !crypto.timingSafeEqual(pws[0].password, hash(req.body))) {
+      if (passwords.length !== 1
+        || !crypto.timingSafeEqual(passwords[0].password, hash(req.body))) {
         return Error('incorrect password');
       }
       // fixme: make more secure
