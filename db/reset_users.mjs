@@ -8,8 +8,11 @@ connect(process.env.DB_PATH).query(sql`
   DROP TABLE IF EXISTS users;
 
   CREATE TABLE users (
+    id INT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
-    password BLOB NOT NULL,
-    person_id INT NOT NULL UNIQUE
-  ) STRICT
+    password BLOB NOT NULL
+  ) STRICT;
+
+  INSERT INTO users (id, email, password) VALUES
+    (0, '', x'')
 `);

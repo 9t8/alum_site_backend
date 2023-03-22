@@ -8,17 +8,17 @@ connect(process.env.DB_PATH).query(sql`
   DROP TABLE IF EXISTS people;
 
   CREATE TABLE people (
-    id INT NOT NULL UNIQUE,
     name TEXT NOT NULL,
-    grad_year INT
+    grad_year INT,
+    user_id INT UNIQUE
   ) STRICT;
 
-  INSERT INTO people (id, name, grad_year) VALUES
-    (0, 'Bobby Boomer', 2000),
-    (1, 'David Li', 2024),
-    (2, 'Veeee Eeeer', 2024),
-    (3, 'Zobby Zoomer', 2040),
-    (4, 'Gunn Alumni Dylan', 1984),
-    (5, 'Shitty Staff', NULL),
-    (6, 'Example User', 1999)
+  INSERT INTO people (name, grad_year) VALUES
+    ('Bobby Boomer', 2000),
+    ('David Li', 2024),
+    ('Veeee Eeeer', 2024),
+    ('Zobby Zoomer', 2040),
+    ('Gunn Alumni Dylan', 1984),
+    ('Shitty Staff', NULL),
+    ('Example User', 1999)
 `);
