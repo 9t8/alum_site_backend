@@ -22,13 +22,13 @@ export async function publicRoutes(server) {
   server.get(
     '/alums',
     async (req, _reply) => {
-      req.query.beginYear ||= Number.MIN_SAFE_INTEGER;
-      req.query.endYear ||= Number.MAX_SAFE_INTEGER;
+      const beginYear = req.query.beginYear || Number.MIN_SAFE_INTEGER;
+      const endYear = req.query.endYear || Number.MAX_SAFE_INTEGER;
 
       const results = {};
       for (const alum of db.queryStream(sql`
         SELECT name, grad_year, user_id FROM people
-        WHERE grad_year BETWEEN ${req.query.beginYear} AND ${req.query.endYear}
+        WHERE grad_year BETWEEN ${beginYear} AND ${endYear}
         ORDER BY name
       `)) {
         results[alum.grad_year] ||= [];
@@ -53,7 +53,7 @@ export async function publicRoutes(server) {
       if (db.query(sql`
         SELECT email FROM users WHERE email=${req.body.email}
       `).length !== 0) {
-        console.error('failed to create existing user');
+        console.error('attempted to create existing user');
         return;
       }
 
