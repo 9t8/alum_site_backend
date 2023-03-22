@@ -64,15 +64,16 @@ export async function publicRoutes(server) {
   server.post(
     '/register',
     async (req, _reply) => {
-      if (db.query(sql`
-        SELECT email FROM users WHERE email=${req.body.email}
-      `).length !== 0) {
-        return Error('user already exists');
+      if (!Number.isInteger(req.body.person_id)) {
+        return Error('person_id must be integral');
       }
 
+      console.log(db.query(sql`SELECT name FROM people WHERE oid = ${req.body.person_id}`));
+
+      const new_uid = db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
       db.query(sql`
         INSERT INTO users (id, email, password) VALUES
-          ((SELECT MAX(id) + 1 FROM users), ${req.body.email}, ${hash(req.body)})
+          (${new_uid}, ${req.body.email}, ${hash(req.body)})
       `);
       return;
     }
