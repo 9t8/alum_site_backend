@@ -9,6 +9,7 @@ connect(process.env.DB_PATH).query(sql`
 
   CREATE TABLE users (
     email TEXT NOT NULL UNIQUE,
-    password BLOB NOT NULL
+    password BLOB NOT NULL,
+    person_id INT NOT NULL UNIQUE
   ) STRICT
 `);

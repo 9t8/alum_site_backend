@@ -19,5 +19,6 @@ connect(process.env.DB_PATH).query(sql`
     (2, 'Veeee Eeeer', 2024),
     (3, 'Zobby Zoomer', 2040),
     (4, 'Gunn Alumni Dylan', 1984),
-    (5, 'Shitty Staff', NULL)
+    (5, 'Shitty Staff', NULL),
+    (6, 'Example User', 1999)
 `);

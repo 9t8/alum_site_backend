@@ -71,8 +71,8 @@ export async function publicRoutes(server) {
       }
 
       db.query(sql`
-        INSERT INTO users (email, password) VALUES
-          (${req.body.email}, ${hash(req.body)})
+        INSERT INTO users (email, password, person_id) VALUES
+          (${req.body.email}, ${hash(req.body)}, ${req.body.person_id})
       `);
       return;
     }
