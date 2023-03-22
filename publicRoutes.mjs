@@ -26,29 +26,32 @@ export async function publicRoutes(server) {
       if (req.query.beginYear) {
         if (req.query.endYear) {
           query = sql`
-          SELECT name, year FROM alums
-          WHERE year BETWEEN ${req.query.beginYear} AND ${req.query.endYear}
-          ORDER BY name`;
+            SELECT name, grad_year FROM people
+            WHERE grad_year BETWEEN ${req.query.beginYear} AND ${req.query.endYear}
+            ORDER BY name
+          `;
         } else {
           query = sql`
-          SELECT name, year FROM alums
-          WHERE year >= ${req.query.beginYear}
-          ORDER BY name`;
+            SELECT name, grad_year FROM people
+            WHERE grad_year >= ${req.query.beginYear}
+            ORDER BY name
+          `;
         }
       } else if (req.query.endYear) {
         query = sql`
-        SELECT name, year FROM alums
-        WHERE year <= ${req.query.endYear}
-        ORDER BY name`;
+          SELECT name, grad_year FROM people
+          WHERE grad_year <= ${req.query.endYear}
+          ORDER BY name
+        `;
       }
-      query ||= sql`SELECT name, year FROM alums ORDER BY name`;
+      query ||= sql`SELECT name, year FROM people ORDER BY name`;
 
       const results = {};
       for (const alum of db.query(query)) {
-        if (!results[alum.year]) {
-          results[alum.year] = [];
+        if (!results[alum.grad_year]) {
+          results[alum.grad_year] = [];
         }
-        results[alum.year].push((({ year, ...rest }) => rest)(alum));
+        results[alum.grad_year].push((({ grad_year, ...rest }) => rest)(alum));
       }
       return results;
     }
@@ -58,15 +61,15 @@ export async function publicRoutes(server) {
     '/register',
     async (req, _reply) => {
       if (db.query(sql`
-      SELECT email FROM users WHERE email=${req.body.email}`
-      ).length !== 0) {
+        SELECT email FROM users WHERE email=${req.body.email}
+      `).length !== 0) {
         return Error('user already exists');
       }
 
       db.query(sql`
-      INSERT INTO users (email, password) VALUES
-        (${req.body.email}, ${hash(req.body)})`
-      );
+        INSERT INTO users (email, password) VALUES
+          (${req.body.email}, ${hash(req.body)})
+      `);
       return;
     }
   );
@@ -94,8 +97,8 @@ export async function publicRoutes(server) {
       }
 
       const pws = db.query(sql`
-      SELECT password FROM users WHERE email=${req.body.email}`
-      );
+        SELECT password FROM users WHERE email=${req.body.email}
+      `);
 
       if (pws.length !== 1 || !crypto.timingSafeEqual(pws[0].password, hash(req.body))) {
         return Error('incorrect password');
