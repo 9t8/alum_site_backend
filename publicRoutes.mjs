@@ -44,7 +44,11 @@ export async function publicRoutes(server) {
           ORDER BY name
         `;
       }
-      query ||= sql`SELECT name, year FROM people ORDER BY name`;
+      query ||= sql`
+        SELECT name, grad_year FROM people
+        WHERE grad_year IS NOT NULL
+        ORDER BY name
+      `;
 
       const results = {};
       for (const alum of db.query(query)) {
