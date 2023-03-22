@@ -68,7 +68,14 @@ export async function publicRoutes(server) {
         return Error('person_id must be integral');
       }
 
-      console.log(db.query(sql`SELECT name FROM people WHERE oid = ${req.body.person_id}`));
+      if (db.query(sql`
+        SELECT email FROM users WHERE email=${req.body.email}
+      `).length !== 0) {
+        console.error('tried to create existing user');
+        return;
+      }
+
+      const users = db.query(sql`SELECT user_id FROM people WHERE oid = ${req.body.person_id}`);
 
       const new_uid = db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
       db.query(sql`
