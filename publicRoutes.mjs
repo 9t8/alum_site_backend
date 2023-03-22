@@ -22,40 +22,22 @@ export async function publicRoutes(server) {
   server.get(
     '/alums',
     async (req, _reply) => {
-      let query;
-      if (req.query.beginYear) {
-        if (req.query.endYear) {
-          query = sql`
-            SELECT name, grad_year FROM people
-            WHERE grad_year BETWEEN ${req.query.beginYear} AND ${req.query.endYear}
-            ORDER BY name
-          `;
-        } else {
-          query = sql`
-            SELECT name, grad_year FROM people
-            WHERE grad_year >= ${req.query.beginYear}
-            ORDER BY name
-          `;
-        }
-      } else if (req.query.endYear) {
-        query = sql`
-          SELECT name, grad_year FROM people
-          WHERE grad_year <= ${req.query.endYear}
-          ORDER BY name
-        `;
-      }
-      query ||= sql`
-        SELECT name, grad_year FROM people
-        WHERE grad_year IS NOT NULL
-        ORDER BY name
-      `;
+      req.query.beginYear ||= Number.MIN_SAFE_INTEGER;
+      req.query.endYear ||= Number.MAX_SAFE_INTEGER;
 
       const results = {};
-      for (const alum of db.query(query)) {
-        if (!results[alum.grad_year]) {
-          results[alum.grad_year] = [];
-        }
-        results[alum.grad_year].push((({ grad_year, ...rest }) => rest)(alum));
+      for (const alum of db.query(sql`
+        SELECT name, grad_year, user_id FROM people
+        WHERE grad_year BETWEEN ${req.query.beginYear} AND ${req.query.endYear}
+        ORDER BY name
+      `)) {
+        results[alum.grad_year] ||= [];
+        results[alum.grad_year].push((({ grad_year, ...rest }) => {
+          if (rest.user_id === null) {
+            delete rest.user_id;
+          }
+          return rest;
+        })(alum));
       }
       return results;
     }
@@ -71,7 +53,7 @@ export async function publicRoutes(server) {
       if (db.query(sql`
         SELECT email FROM users WHERE email=${req.body.email}
       `).length !== 0) {
-        console.error('tried to create existing user');
+        console.error('failed to create existing user');
         return;
       }
 
@@ -85,8 +67,9 @@ export async function publicRoutes(server) {
         = db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
       db.query(sql`
         INSERT INTO users (id, email, password) VALUES
-          (${new_uid}, ${req.body.email}, ${hash(req.body)})
-      `); // fixme change user_id
+          (${new_uid}, ${req.body.email}, ${hash(req.body)});
+        UPDATE people SET user_id = ${new_uid} WHERE oid = ${req.body.person_id}
+      `);
       return;
     }
   );
