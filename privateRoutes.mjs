@@ -6,7 +6,10 @@ export async function privateRoutes(server) {
   server.get(
     '/test-tok',
     async (req, _reply) => {
-      return { content: req.auth.email + ' successfully authenticated' };
+      return {
+        content: 'successfully authenticated',
+        token: req.auth
+      };
     }
   );
 }

@@ -1,10 +1,10 @@
 'use strict';
 
-import connect, { sql } from '@databases/sqlite-sync';
+import { sql } from '@databases/sqlite-sync';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 
-const db = connect(process.env.DB_PATH);
+import { db } from './db.mjs';
 
 const hash = req_body =>
   crypto.scryptSync(
@@ -26,7 +26,7 @@ export async function publicRoutes(server) {
       req.query.endYear ||= Number.MAX_SAFE_INTEGER;
 
       const results = {};
-      for (const alum of db.query(sql`
+      for (const alum of db.queryStream(sql`
         SELECT name, grad_year, user_id FROM people
         WHERE grad_year BETWEEN ${req.query.beginYear} AND ${req.query.endYear}
         ORDER BY name
@@ -96,19 +96,19 @@ export async function publicRoutes(server) {
         return Error('missing email in request body');
       }
 
-      const passwords = db.query(sql`
-        SELECT password FROM users WHERE email=${req.body.email}
+      const idens = db.query(sql`
+        SELECT id, password FROM users WHERE email=${req.body.email}
       `);
 
-      if (passwords.length !== 1
-        || !crypto.timingSafeEqual(passwords[0].password, hash(req.body))) {
+      if (idens.length !== 1
+        || !crypto.timingSafeEqual(idens[0].password, hash(req.body))) {
         return Error('incorrect password');
       }
+
       // fixme: make more secure
-      return server.generateAuthToken({
-        email: req.body.email,
-        valid: 'yeah!'
-      });
+      return server.generateAuthToken(
+        { ...idens[0], valid: 'yeah!' }
+      );
     }
   );
 }
