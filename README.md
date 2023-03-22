@@ -1,5 +1,5 @@
 # backend
-`npm install` to install deps.
+`npm i` to install deps.
 
 create a `.env` file with the following contents:
 ```bash
