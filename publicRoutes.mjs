@@ -75,13 +75,17 @@ export async function publicRoutes(server) {
         return;
       }
 
-      const users = db.query(sql`SELECT user_id FROM people WHERE oid = ${req.body.person_id}`);
+      if (db.query(sql`
+        SELECT user_id FROM people WHERE oid = ${req.body.person_id}
+      `)[0].user_id !== null) {
+        return Error('person is taken');
+      }
 
       const new_uid = db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
       db.query(sql`
         INSERT INTO users (id, email, password) VALUES
           (${new_uid}, ${req.body.email}, ${hash(req.body)})
-      `);
+      `); // fixme change user_id
       return;
     }
   );
