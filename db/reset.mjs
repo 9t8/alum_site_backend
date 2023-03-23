@@ -10,11 +10,12 @@ connect(process.env.DB_PATH).query(sql`
   CREATE TABLE users (
     id INT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
-    password BLOB NOT NULL
+    password BLOB NOT NULL,
+    bio TEXT NOT NULL
   ) STRICT;
 
-  INSERT INTO users (id, email, password) VALUES
-    (0, '', x'');
+  INSERT INTO users (id, email, password, bio) VALUES
+    (0, '', x'', '');
 
   DROP TABLE IF EXISTS people;
 
