@@ -4,6 +4,7 @@ import 'dotenv/config';
 
 import fastify from 'fastify';
 import cors from '@fastify/cors';
+import fastifyFormbody from '@fastify/formbody';
 import fastifyEsso from 'fastify-esso';
 import { sql } from '@databases/sqlite-sync';
 
@@ -13,6 +14,7 @@ import { privateRoutes } from './privateRoutes.mjs';
 
 fastify()
   .register(cors)
+  .register(fastifyFormbody)
   .register(fastifyEsso({
     secret: process.env.ESSO_SECRET,
     extra_validation: async (req, _reply) => {
