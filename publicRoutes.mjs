@@ -66,8 +66,8 @@ export async function publicRoutes(server) {
       const new_uid
         = db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
       db.query(sql`
-        INSERT INTO users (id, email, password) VALUES
-          (${new_uid}, ${req.body.email}, ${hash(req.body)});
+        INSERT INTO users (id, email, password, bio) VALUES
+          (${new_uid}, ${req.body.email}, ${hash(req.body)}, '');
         UPDATE people SET user_id = ${new_uid} WHERE oid = ${req.body.person_id}
       `);
       return;
