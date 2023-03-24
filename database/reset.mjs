@@ -1,5 +1,3 @@
-'use strict';
-
 import 'dotenv/config';
 
 import connect, { sql } from '@databases/sqlite-sync';

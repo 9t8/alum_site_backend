@@ -2,11 +2,11 @@ import { sql } from '@databases/sqlite-sync';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 
-import { db } from './db.mjs';
+import db from './db.mjs';
 
-const hash = (req_body) => crypto.scryptSync(
-  req_body.password,
-  `gunn-alumni/backend/${req_body.email}`,
+const hash = (reqBody) => crypto.scryptSync(
+  reqBody.password,
+  `gunn-alumni/backend/${reqBody.email}`,
   128,
   { p: 5 },
 );
@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
   streamTransport: true,
 });
 
-export async function publicRoutes(server) {
+export default async function publicRoutes(server) {
   server.get(
     '/alums',
     async (req, _reply) => {

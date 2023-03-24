@@ -6,9 +6,9 @@ import fastifyFormbody from '@fastify/formbody';
 import fastifyEsso from 'fastify-esso';
 import { sql } from '@databases/sqlite-sync';
 
-import { db } from './db.mjs';
-import { publicRoutes } from './publicRoutes.mjs';
-import { privateRoutes } from './privateRoutes.mjs';
+import db from './db.mjs';
+import publicRoutes from './publicRoutes.mjs';
+import privateRoutes from './privateRoutes.mjs';
 
 fastify()
   .register(cors)

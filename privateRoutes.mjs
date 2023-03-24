@@ -1,4 +1,4 @@
-export async function privateRoutes(server) {
+export default async function privateRoutes(server) {
   server.requireAuthentication(server);
 
   server.get(
