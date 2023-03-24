@@ -27,6 +27,7 @@ fastify()
   }))
   .register(publicRoutes)
   .register(privateRoutes)
-  .listen({ port: process.env.BACKEND_PORT }).then(address => {
+  .listen({ port: process.env.BACKEND_PORT })
+  .then(address => {
     console.log(address);
   });
