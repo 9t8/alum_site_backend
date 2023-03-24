@@ -1,21 +1,19 @@
-'use strict';
-
 import { sql } from '@databases/sqlite-sync';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 
 import { db } from './db.mjs';
 
-const hash = req_body =>
-  crypto.scryptSync(
-    req_body.password, 'gunn-alumni/backend/' + req_body.email,
-    128,
-    { p: 5 }
-  );
+const hash = (req_body) => crypto.scryptSync(
+  req_body.password,
+  `gunn-alumni/backend/${req_body.email}`,
+  128,
+  { p: 5 },
+);
 
 // todo: use mailjet to actually send emails
 const transporter = nodemailer.createTransport({
-  streamTransport: true
+  streamTransport: true,
 });
 
 export async function publicRoutes(server) {
@@ -40,7 +38,7 @@ export async function publicRoutes(server) {
         })(alum));
       }
       return results;
-    }
+    },
   );
 
   server.post(
@@ -63,15 +61,13 @@ export async function publicRoutes(server) {
         return Error('person is taken');
       }
 
-      const new_uid
-        = db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
+      const new_uid = db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
       db.query(sql`
         INSERT INTO users (id, email, password, bio) VALUES
           (${new_uid}, ${req.body.email}, ${hash(req.body)}, '');
         UPDATE people SET user_id = ${new_uid} WHERE oid = ${req.body.person_id}
       `);
-      return;
-    }
+    },
   );
 
   server.post(
@@ -82,11 +78,11 @@ export async function publicRoutes(server) {
         from: 'fakeauth@gunnalum.site',
         to: req.body.email,
         subject: 'WEBSITE NAME Password Reset',
-        text: 'test email text.'
+        text: 'test email text.',
       }, (_err, info) => info.message.pipe(process.stdout));
 
       return Error('fixme');
-    }
+    },
   );
 
   server.post(
@@ -107,8 +103,8 @@ export async function publicRoutes(server) {
 
       // fixme: make more secure
       return server.generateAuthToken(
-        { ...idens[0], valid: 'yeah!' }
+        { ...idens[0], valid: 'yeah!' },
       );
-    }
+    },
   );
 }

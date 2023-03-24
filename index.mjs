@@ -1,5 +1,3 @@
-'use strict';
-
 import 'dotenv/config';
 
 import fastify from 'fastify';
@@ -23,11 +21,11 @@ fastify()
       `)[0].password).equals(Buffer(req.auth.password))) {
         throw Error('authentication failed');
       }
-    }
+    },
   }))
   .register(publicRoutes)
   .register(privateRoutes)
   .listen({ port: process.env.BACKEND_PORT })
-  .then(address => {
+  .then((address) => {
     console.log(address);
   });
