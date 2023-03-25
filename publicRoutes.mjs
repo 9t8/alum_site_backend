@@ -24,19 +24,19 @@ export default async function publicRoutes(server) {
       const endYear = req.query.endYear || Number.MAX_SAFE_INTEGER;
 
       const results = {};
-      for (const alum of db.queryStream(sql`
+      db.query(sql`
         SELECT name, grad_year, user_id FROM people
         WHERE grad_year BETWEEN ${beginYear} AND ${endYear}
         ORDER BY name
-      `)) {
+      `).forEach((alum) => {
         results[alum.grad_year] ||= [];
-        results[alum.grad_year].push((({ grad_year, ...rest }) => {
-          if (rest.user_id === null) {
-            delete rest.user_id;
+        results[alum.grad_year].push((({ name, user_id }) => {
+          if (user_id !== null) {
+            return { name, user_id };
           }
-          return rest;
+          return { name };
         })(alum));
-      }
+      });
       return results;
     },
   );
