@@ -3,7 +3,7 @@
 
 create a `.env` file with the following contents:
 ```bash
-DB_PATH=db.db3
+DB_PATH=store.db3
 ESSO_SECRET=DEVELOPMENT_AND_TESTING # so we can share the db for now
 BACKEND_PORT=9999 # you may change this
 ```
