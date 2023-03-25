@@ -49,16 +49,16 @@ export default async function publicRoutes(server) {
       }
 
       if (db.query(sql`
+        SELECT user_id FROM people WHERE oid = ${req.body.person_id}
+      `)[0].user_id !== null) {
+        throw Error('person is taken');
+      }
+
+      if (db.query(sql`
         SELECT email FROM users WHERE email=${req.body.email}
       `).length !== 0) {
         console.warn('attempted to create existing user');
         return;
-      }
-
-      if (db.query(sql`
-        SELECT user_id FROM people WHERE oid = ${req.body.person_id}
-      `)[0].user_id !== null) {
-        throw Error('person is taken');
       }
 
       const newUid = db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
