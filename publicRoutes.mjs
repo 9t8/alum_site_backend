@@ -51,7 +51,7 @@ export default async function publicRoutes(server) {
       if (db.query(sql`
         SELECT email FROM users WHERE email=${req.body.email}
       `).length !== 0) {
-        console.error('attempted to create existing user');
+        console.warn('attempted to create existing user');
         return;
       }
 
