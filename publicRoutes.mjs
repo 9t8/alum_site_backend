@@ -45,7 +45,7 @@ export default async function publicRoutes(server) {
     '/register',
     async (req, _reply) => {
       if (!Number.isInteger(req.body.person_id)) {
-        return Error('person_id must be integral');
+        throw Error('person_id must be integral');
       }
 
       if (db.query(sql`
@@ -58,7 +58,7 @@ export default async function publicRoutes(server) {
       if (db.query(sql`
         SELECT user_id FROM people WHERE oid = ${req.body.person_id}
       `)[0].user_id !== null) {
-        return Error('person is taken');
+        throw Error('person is taken');
       }
 
       const newUid = db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
