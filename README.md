@@ -12,7 +12,7 @@ run `database/reset.mjs` to create nessecary tables.
 
 "Run and Debug" in VS Code to run server.
 
-install [the eslint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint); try not to introduce new squigglies.
+install [the eslint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint); try not to add new squigglies.
 
 install [thunder client](https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client) for testing the api. you should be able to find some sample queries.
 * enable `thunder-client.saveToWorkspace`.
