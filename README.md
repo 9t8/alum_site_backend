@@ -14,8 +14,7 @@ run `reset_db.mjs` to create nessecary tables.
 
 install [the eslint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint); try not to add new squigglies.
 
-install [thunder client](https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client) for testing the api. you should be able to find some sample queries.
-* enable `thunder-client.saveToWorkspace`.
+install [thunder client](https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client) for testing the api. enable `thunder-client.saveToWorkspace`, restart code, and you should find some sample queries.
 
 before pushing, make sure you did not add any unintended files, especially secrets.
 
