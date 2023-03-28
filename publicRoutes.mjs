@@ -66,16 +66,6 @@ export default async function publicRoutes(server) {
   server.post(
     '/register',
     async (req, _reply) => {
-      if (!Number.isInteger(req.body.person_id)) {
-        throw Error('person_id must be integral');
-      }
-
-      if (db.query(sql`
-        SELECT user_id FROM people WHERE oid = ${req.body.person_id}
-      `)[0].user_id !== null) {
-        throw Error('person is taken');
-      }
-
       if (db.query(sql`
         SELECT email FROM users WHERE email=${req.body.email}
       `).length !== 0) {
@@ -86,8 +76,7 @@ export default async function publicRoutes(server) {
       const newUid = db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
       db.query(sql`
         INSERT INTO users (id, email, password, bio) VALUES
-          (${newUid}, ${req.body.email}, ${hash(req.body)}, '');
-        UPDATE people SET user_id = ${newUid} WHERE oid = ${req.body.person_id}
+          (${newUid}, ${req.body.email}, ${hash(req.body)}, '')
       `);
     },
   );
