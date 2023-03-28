@@ -125,26 +125,6 @@
     "tests": []
   },
   {
-    "_id": "498dfa2d-d438-488f-999b-905d347a2eea",
-    "colId": "history",
-    "containerId": "",
-    "name": "[::1]:{{BACKEND_PORT}}/user?user_id=1",
-    "url": "[::1]:{{BACKEND_PORT}}/user?user_id=1",
-    "method": "GET",
-    "sortNum": 0,
-    "created": "2023-03-28T22:27:53.096Z",
-    "modified": "2023-03-28T22:27:53.096Z",
-    "headers": [],
-    "params": [
-      {
-        "name": "user_id",
-        "value": "1",
-        "isPath": false
-      }
-    ],
-    "tests": []
-  },
-  {
     "_id": "0a887682-97c9-4e95-ada4-5b08f24e9e1e",
     "colId": "history",
     "containerId": "",
