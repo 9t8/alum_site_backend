@@ -15,7 +15,7 @@ fastify()
   .register(fastifyFormbody)
   .register(fastifyEsso({
     secret: process.env.ESSO_SECRET,
-    extra_validation: async (req, _reply) => { // switch
+    extra_validation: async (req, _reply) => {
       if (!req.auth.valid || !Buffer.from(req.auth.password).equals(db.query(sql`
         SELECT password FROM users WHERE id = ${req.auth.id}
       `)[0].password)) {
