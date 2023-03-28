@@ -41,6 +41,28 @@ export default async function publicRoutes(server) {
     },
   );
 
+  server.get(
+    '/user',
+    async (req, _reply) => {
+      const userId = parseInt(req.query.userId, 10);
+      if (!Number.isInteger(userId)) {
+        throw Error('userId must be integral');
+      }
+      if (userId < 1) {
+        throw Error('userId must be positive');
+      }
+
+      return {
+        ...db.query(sql`
+          SELECT name, grad_year FROM people WHERE user_id = ${userId}
+        `)[0],
+        ...db.query(sql`
+          SELECT bio FROM users WHERE id = ${userId}
+        `)[0],
+      };
+    },
+  );
+
   server.post(
     '/register',
     async (req, _reply) => {
