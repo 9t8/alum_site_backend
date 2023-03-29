@@ -28,5 +28,4 @@ fastify()
   .listen({ port: process.env.BACKEND_PORT })
   .then((address) => {
     console.log(address);
-    // test
   });

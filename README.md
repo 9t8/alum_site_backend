@@ -27,5 +27,3 @@ don't put sensitive/important/large data in the db.
 
 ## useful extensions
 [sqlite3 editor](https://marketplace.visualstudio.com/items?itemName=yy0931.vscode-sqlite3-editor) for viewing and manipulating the db (requires python installation).
-
-test
