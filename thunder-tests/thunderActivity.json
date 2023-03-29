@@ -27,22 +27,13 @@
     "method": "POST",
     "sortNum": 0,
     "created": "2023-03-06T01:51:15.058Z",
-    "modified": "2023-03-23T23:04:02.963Z",
+    "modified": "2023-03-29T01:19:47.029Z",
     "headers": [],
     "params": [],
     "body": {
-      "type": "formencoded",
-      "raw": "",
-      "form": [
-        {
-          "name": "email",
-          "value": "user@example.com"
-        },
-        {
-          "name": "password",
-          "value": "1234"
-        }
-      ]
+      "type": "json",
+      "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"1234\"\n}",
+      "form": []
     },
     "tests": []
   },
