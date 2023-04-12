@@ -29,10 +29,10 @@ export default async function publicRoutes(server) {
 
         const results = {};
         db.query(sql`
-        SELECT name, grad_year, user_id FROM people
-        WHERE grad_year BETWEEN ${beginYear} AND ${endYear}
-        ORDER BY name
-      `).forEach((alum) => {
+          SELECT name, grad_year, user_id FROM people
+          WHERE grad_year BETWEEN ${beginYear} AND ${endYear}
+          ORDER BY name
+        `).forEach((alum) => {
           results[alum.grad_year] ||= [];
           results[alum.grad_year].push((({name, user_id}) => {
             if (user_id !== null) {
@@ -58,11 +58,11 @@ export default async function publicRoutes(server) {
 
         return {
           ...db.query(sql`
-          SELECT name, grad_year FROM people WHERE user_id = ${userId}
-        `)[0],
+            SELECT name, grad_year FROM people WHERE user_id = ${userId}
+          `)[0],
           ...db.query(sql`
-          SELECT bio FROM users WHERE id = ${userId}
-        `)[0],
+            SELECT bio FROM users WHERE id = ${userId}
+          `)[0],
         };
       },
   );
@@ -71,8 +71,8 @@ export default async function publicRoutes(server) {
       '/register',
       async (req, _reply) => {
         if (db.query(sql`
-        SELECT email FROM users WHERE email=${req.body.email}
-      `).length !== 0) {
+          SELECT email FROM users WHERE email=${req.body.email}
+        `).length !== 0) {
           console.warn('attempted to create existing user');
           return;
         }
@@ -80,9 +80,9 @@ export default async function publicRoutes(server) {
         const newUid =
             db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
         db.query(sql`
-        INSERT INTO users (id, email, password, bio) VALUES
-          (${newUid}, ${req.body.email}, ${hash(req.body)}, '')
-      `);
+          INSERT INTO users (id, email, password, bio) VALUES
+            (${newUid}, ${req.body.email}, ${hash(req.body)}, '')
+        `);
       },
   );
 
@@ -109,8 +109,8 @@ export default async function publicRoutes(server) {
         }
 
         const idens = db.query(sql`
-        SELECT id, password FROM users WHERE email=${req.body.email}
-      `);
+          SELECT id, password FROM users WHERE email=${req.body.email}
+        `);
 
         if (idens.length !== 1 ||
         !crypto.timingSafeEqual(idens[0].password, hash(req.body))) {
