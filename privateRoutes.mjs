@@ -1,3 +1,7 @@
+/**
+ * add private routes
+ * @param {*} server
+ */
 export default async function privateRoutes(server) {
   server.requireAuthentication(server);
 

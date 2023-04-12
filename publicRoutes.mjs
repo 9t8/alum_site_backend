@@ -16,6 +16,10 @@ const transporter = nodemailer.createTransport({
   streamTransport: true,
 });
 
+/**
+ * add public routes
+ * @param {*} server
+ */
 export default async function publicRoutes(server) {
   server.get(
       '/alums',
@@ -73,7 +77,8 @@ export default async function publicRoutes(server) {
           return;
         }
 
-        const newUid = db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
+        const newUid =
+            db.query(sql`SELECT MAX(id) FROM users`)[0]['MAX(id)'] + 1;
         db.query(sql`
         INSERT INTO users (id, email, password, bio) VALUES
           (${newUid}, ${req.body.email}, ${hash(req.body)}, '')
