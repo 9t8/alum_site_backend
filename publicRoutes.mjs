@@ -108,18 +108,18 @@ export default async function publicRoutes(server) {
           return Error('missing email in request body');
         }
 
-        const idens = db.query(sql`
+        const users = db.query(sql`
           SELECT id, password FROM users WHERE email=${req.body.email}
         `);
 
-        if (idens.length !== 1 ||
-        !crypto.timingSafeEqual(idens[0].password, hash(req.body))) {
+        if (users.length !== 1 ||
+        !crypto.timingSafeEqual(users[0].password, hash(req.body))) {
           return Error('incorrect password');
         }
 
         // fixme: make more secure
         return server.generateAuthToken(
-            {...idens[0], valid: 'yeah!'},
+            {...users[0], valid: 'yeah!'},
         );
       },
   );
