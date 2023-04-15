@@ -12,7 +12,20 @@ run `reset_db.mjs` to create nessecary tables.
 
 "Run and Debug" in VS Code to run server.
 
-install [the eslint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint); try not to add new squigglies.
+install [the eslint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint); try not to add new squiggles.
+
+add this to your `settings.json`:
+```
+    "editor.formatOnSave": true,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "eslint.format.enable": true,
+    "eslint.onIgnoredFiles": "warn",
+    "[javascript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    }
+```
 
 install [thunder client](https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client) for testing the api. enable `thunder-client.saveToWorkspace`, restart code, and you should find some sample queries.
 
