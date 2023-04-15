@@ -113,7 +113,7 @@ export default async function publicRoutes(server) {
         `);
 
         if (users.length !== 1 ||
-        !crypto.timingSafeEqual(users[0].password, hash(req.body))) {
+        !crypto.timingSafeEqual(hash(req.body), users[0].password)) {
           return Error('incorrect password');
         }
 
