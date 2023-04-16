@@ -18,16 +18,17 @@ install [thunder client](https://marketplace.visualstudio.com/items?itemName=ran
 
 add this to your `settings.json`:
 ```
-    "editor.formatOnSave": true,
-    "files.trimTrailingWhitespace": true,
-    "files.insertFinalNewline": true,
-    "files.trimFinalNewlines": true,
-    "thunder-client.saveToWorkspace": true,
-    "eslint.format.enable": true,
-    "eslint.onIgnoredFiles": "warn",
-    "[javascript]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    }
+  "editor.formatOnSave": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "thunder-client.saveToWorkspace": true,
+  "eslint.format.enable": true,
+  "eslint.onIgnoredFiles": "warn",
+  "eslint.problems.shortenToSingleLine": true,
+  "[javascript]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
 ```
 
 before pushing, make sure you did not add any unintended files, especially secrets.
