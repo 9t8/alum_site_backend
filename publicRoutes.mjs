@@ -89,7 +89,7 @@ export default async function publicRoutes(server) {
   server.post(
       '/reset-pw',
       async (req, _reply) => {
-      // todo: make this work
+        // todo: make this work
         transporter.sendMail({
           from: 'fakeauth@gunnalum.site',
           to: req.body.email,
