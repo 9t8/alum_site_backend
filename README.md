@@ -21,9 +21,7 @@ before pushing, make sure you did not add any unintended files, especially secre
 ## warnings
 **on live servers, use a KMS or something to properly store `env.ESSO_KEY`.** `require('crypto').randomBytes(258).toString('base64');` in the node repl seems to generate a good key.
 
-code is mostly untested.
-
-don't put sensitive/important/large data in the db.
+do not put sensitive/important/large data in the db.
 
 ## useful extensions
 [sqlite3 editor](https://marketplace.visualstudio.com/items?itemName=yy0931.vscode-sqlite3-editor) for viewing and manipulating the db (requires python installation).
