@@ -1,3 +1,5 @@
+as of 2023-04-17, everything here besides tests is in [gunn-alumni/gunn-alumni](https://github.com/gunn-alumni/gunn-alumni). this repo is no longer needed.
+
 # backend
 `npm i` to install deps.
 
